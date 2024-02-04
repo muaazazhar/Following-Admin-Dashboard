@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  font-family: 'IBM Plex Sans, Work Sans';
+  background-color: #F9F9F9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, a {
+  font-family: 'IBM Plex Sans, Work Sans';
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.pdf-div{
+  padding: 50px;
+  background-color: #dedede;
+  margin-top: 50px;
+}
