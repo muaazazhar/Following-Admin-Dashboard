@@ -1,26 +1,10 @@
-import {
-    Box,
-    Grid,
-    InputBase,
-    Step,
-    StepLabel,
-    Stepper,
-    styled,
-} from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { LoadingButton } from '@mui/lab';
 import HeaderText from '../Text/HeaderText';
-import CustomizedInputsStyled from '../Text/StandardTextField';
-import SubHeaderText from '../Text/SubHeaderText';
-import WrapperStandardTextField from '../Wrapper/WrapperStandardTextField';
-import CustomSelect from '../Input/CustomSelect';
 import dev from '../../services/axios-client';
 import HeaderWrapper from '../Wrapper/HeaderWrapper';
 import Loader from '../Loader';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import PrimaryBtn from '../CustomButton/PrimaryBtn';
-import { useNavigate } from 'react-router';
 import validationService from '../../services/validationService';
 import FormSubmitDialog from '../Popups/formSubmitDialog';
 import CustomizedSteppers from '../Stepper';
@@ -35,7 +19,7 @@ const CreateNewCampaign = () => {
     const [loading, setLoading] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
     const [errors, setErrors] = useState({});
-    const [index, setIndex] = useState(4);
+    const [index, setIndex] = useState(0);
     const [requiredFields, setRequiredFields] = useState([]);
     const [modal, setModal] = useState({ open: false });
     const [payoutType, setPayoutType] = useState('');
@@ -97,6 +81,7 @@ const CreateNewCampaign = () => {
         e.preventDefault();
         setLoading(true);
         setLoading(false);
+        setIndex((prev) => prev + 1);
         data = {
             ...data,
             audienceGender: data.audienceGender?.value,
@@ -129,6 +114,7 @@ const CreateNewCampaign = () => {
         if (Object.entries(validatedFormData).length < 1) {
             if (index < 1) {
                 setIndex(1);
+                // return;
             } else {
                 data = {
                     ...data,
@@ -145,7 +131,6 @@ const CreateNewCampaign = () => {
                 setErrors(validatedFormData);
                 delete data.payout;
                 if (Object.entries(validatedFormData).length < 1) {
-                    setIndex((prev) => prev + 1);
                     if (index === 3) {
                         try {
                             const body = new FormData();
@@ -174,7 +159,6 @@ const CreateNewCampaign = () => {
                                 },
                             });
                             if (response.data) {
-                                setIndex(2);
                                 setLoading(false);
                             }
                         } catch (error) {

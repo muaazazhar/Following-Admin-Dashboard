@@ -21,7 +21,7 @@ import { useFormData } from '../../services/formDataContext';
 
 const CampaignStep5 = () => {
     const { user } = JSON.parse(localStorage.getItem('user'));
-    const [showPaymentPage, setShowPaymentPage] = useState(true);
+    const [showPaymentPage, setShowPaymentPage] = useState(false);
     const { formData } = useFormData();
 
     const capitalizedFirstChar = (str) => {

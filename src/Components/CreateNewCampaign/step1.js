@@ -57,38 +57,77 @@ const CampaignStep1 = ({
         <>
             <HeaderText text="Create Campaign" color="#282F53" />
             <WrapperStandardTextField
-                lg="12"
+                lg={12}
                 style={{ paddingRight: '0px', paddingTop: '20px' }}
             >
-                <PreLabel label={'Campaign Title'} />
-                <CustomizedInputsStyled
-                    color="#272727"
-                    required={true}
-                    label="Please Enter Campaign Title"
-                    error={errors['title']}
-                >
-                    <InputBase
-                        fullWidth
-                        sx={{
-                            ml: 2,
-                            flex: 1,
-                            color: '#808080',
-                            fontSize: '14px',
-                            lineHeight: '21px',
-                        }}
-                        placeholder={'Title'}
-                        type={'text'}
-                        inputProps={{
-                            'aria-label': 'Title',
-                        }}
-                        required
-                        error={!!errors['title']}
-                        helperText={
-                            errors['title'] ? errors['title'].message : ''
-                        }
-                        {...register('title')}
-                    />
-                </CustomizedInputsStyled>
+                <Grid container spacing={2} alignItems="center" direction="row">
+                    <Grid item xs={6}>
+                        <PreLabel label={'Campaign Id'} />
+                        <CustomizedInputsStyled
+                            color="#272727"
+                            required={true}
+                            label="ID"
+                            error={errors['id']}
+                        >
+                            <InputBase
+                                fullWidth
+                                disabled
+                                sx={{
+                                    ml: 2,
+                                    flex: 1,
+                                    color: '#808080',
+                                    fontSize: '14px',
+                                    lineHeight: '21px',
+                                }}
+                                placeholder={'Id'}
+                                type={'text'}
+                                value={'123445'}
+                                inputProps={{
+                                    'aria-label': 'Title',
+                                }}
+                                required
+                                error={!!errors['id']}
+                                helperText={
+                                    errors['id'] ? errors['id'].message : ''
+                                }
+                                {...register('id')}
+                            />
+                        </CustomizedInputsStyled>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <PreLabel label={'Campaign Title'} />
+                        <CustomizedInputsStyled
+                            color="#272727"
+                            required={true}
+                            label="Please Enter Campaign Title"
+                            error={errors['title']}
+                        >
+                            <InputBase
+                                fullWidth
+                                sx={{
+                                    ml: 2,
+                                    flex: 1,
+                                    color: '#808080',
+                                    fontSize: '14px',
+                                    lineHeight: '21px',
+                                }}
+                                placeholder={'Title'}
+                                type={'text'}
+                                inputProps={{
+                                    'aria-label': 'Title',
+                                }}
+                                required
+                                error={!!errors['title']}
+                                helperText={
+                                    errors['title']
+                                        ? errors['title'].message
+                                        : ''
+                                }
+                                {...register('title')}
+                            />
+                        </CustomizedInputsStyled>
+                    </Grid>
+                </Grid>
             </WrapperStandardTextField>
             <WrapperStandardTextField
                 style={{ paddingRight: '10px', paddingTop: '20px' }}
