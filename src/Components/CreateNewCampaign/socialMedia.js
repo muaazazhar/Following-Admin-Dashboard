@@ -20,21 +20,33 @@ import validationService from '../../services/validationService';
 const SocialMedia = ({
     onChangeHandler,
     errors,
-    register,
     socialMediaVal,
     socialMediaOptions,
+    hashtags,
+    setHastags,
+    description,
+    setDescription,
+    brandAccount,
+    setBrandAccount,
+    linkToAttach,
+    setLinkToAttach,
+    specificText,
+    setSpecificText,
+    content,
+    setContent,
+    setPlatform,
 }) => {
-    const [hashtags, setHastags] = useState([]);
     const [hashtag, setHastag] = useState('');
     const [openAddTags, setOpenAddTags] = useState(false);
     const [error, setError] = useState('');
     const [errorBar, setErrorBar] = useState(false);
     const [showHashTags, setShowHashTags] = useState(false);
     const [contentNeededOptions, setContentNeededOptions] = useState([]);
+    const [once, setOnce] = useState(false);
 
     const handleAddTags = () => {
         if (hashtag) {
-            setHastags([...hashtags, hashtag]);
+            setHastags([...hashtags, `#${hashtag}`]);
             setHastag('');
             setError('');
             setOpenAddTags(false);
@@ -50,7 +62,9 @@ const SocialMedia = ({
     };
 
     const handleSocialMediaChanges = () => {
-        if (socialMediaVal) {
+        if (socialMediaVal && !content) {
+            setContent(contentNeededOptions[0]);
+            setPlatform(socialMediaVal['label'].toLowerCase());
             switch (socialMediaVal['label'].toLowerCase()) {
                 case 'instagram':
                     setContentNeededOptions(
@@ -69,6 +83,10 @@ const SocialMedia = ({
                     break;
             }
         }
+    };
+
+    const handleContentChange = (e) => {
+        setContent(e);
     };
 
     useEffect(() => {
@@ -117,12 +135,12 @@ const SocialMedia = ({
                             error={errors['content_needed']}
                         />
                         <CustomSelect
-                            onChange={onChangeHandler}
+                            onChange={handleContentChange}
                             placeholder="Select Platform"
                             options={contentNeededOptions}
                             name="content_needed"
-                            defaultValue={contentNeededOptions[0]}
-                            value={contentNeededOptions[0]}
+                            defaultValue={content}
+                            value={content}
                             multi={showHashTags}
                             disabled={!showHashTags}
                         />
@@ -191,18 +209,19 @@ const SocialMedia = ({
                                 customstyle={{ fontWeight: 600 }}
                                 text="Specific Text"
                                 color="#282F53"
-                                error={errors['specific_text']}
                             />
                             <TextField
                                 fullWidth
+                                value={specificText}
+                                onChange={(e) =>
+                                    setSpecificText(e.target.value)
+                                }
                                 sx={{
                                     color: '#808080',
                                     fontSize: '14px',
                                     lineHeight: '21px',
                                 }}
-                                error={!!errors['specific_text']}
                                 placeholder="Specific Text"
-                                {...register('specific_text')}
                             />
                         </WrapperStandardTextField>
                     )}
@@ -292,17 +311,12 @@ const SocialMedia = ({
                                 fontSize: '14px',
                                 lineHeight: '21px',
                             }}
+                            onChange={(e) => setDescription(e.target.value)}
+                            value={description}
                             multiline
+                            required
                             rows={4} // Set the number of rows based on your design
-                            error={
-                                !!errors[
-                                    `${socialMediaVal['label']}_description`
-                                ]
-                            }
                             placeholder="e.g “We want content creators to portray as if they are customers and review the experience in an euthentic way”"
-                            {...register(
-                                `${socialMediaVal['label']}_description`,
-                            )}
                         />
                     </WrapperStandardTextField>
                     <WrapperStandardTextField
@@ -313,7 +327,6 @@ const SocialMedia = ({
                             customstyle={{ fontWeight: 600 }}
                             text="Brand Account"
                             color="#282F53"
-                            error={errors['brand_account']}
                         />
                         <TextField
                             fullWidth
@@ -322,9 +335,9 @@ const SocialMedia = ({
                                 fontSize: '14px',
                                 lineHeight: '21px',
                             }}
-                            error={!!errors['brand_account']}
+                            value={brandAccount}
+                            onChange={(e) => setBrandAccount(e.target.value)}
                             placeholder="e.g “We want content creators to portray as if they are customers and review the experience in an euthentic way”"
-                            {...register('brand_account')}
                         />
                     </WrapperStandardTextField>
                     {!showHashTags && (
@@ -336,7 +349,6 @@ const SocialMedia = ({
                                 customstyle={{ fontWeight: 600 }}
                                 text="Link to Attach"
                                 color="#282F53"
-                                error={errors['link_attach']}
                             />
                             <TextField
                                 fullWidth
@@ -345,9 +357,11 @@ const SocialMedia = ({
                                     fontSize: '14px',
                                     lineHeight: '21px',
                                 }}
-                                error={!!errors['link_attach']}
+                                value={linkToAttach}
+                                onChange={(e) =>
+                                    setLinkToAttach(e.target.value)
+                                }
                                 placeholder={`${socialMediaVal['label']} Video Link`}
-                                {...register('link_attach')}
                             />
                         </WrapperStandardTextField>
                     )}

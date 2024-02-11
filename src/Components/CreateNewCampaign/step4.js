@@ -17,10 +17,9 @@ const CampaignStep4 = ({
 }) => {
     useEffect(() => {
         setRequiredFields([
-            'campaign_type',
-            'payment_type',
-            'contentCategory',
-            'campaign_description',
+            'paidOrBarter',
+            'paymentMethod',
+            'campaignDescription',
         ]);
     }, []);
 
@@ -42,13 +41,13 @@ const CampaignStep4 = ({
                     customstyle={{
                         fontWeight: 600,
                     }}
-                    error={errors['campaign_type']}
+                    error={errors['paidOrBarter']}
                 />
                 <CustomSelect
                     onChange={onChangeHandler}
                     placeholder="Campaign Type"
                     options={validationService.CampaignTypeOptions}
-                    name="campaign_type"
+                    name="paidOrBarter"
                 />
             </WrapperStandardTextField>
             <WrapperStandardTextField
@@ -60,33 +59,13 @@ const CampaignStep4 = ({
                     customstyle={{
                         fontWeight: 600,
                     }}
-                    error={errors['payment_type']}
+                    error={errors['paymentMethod']}
                 />
                 <CustomSelect
                     onChange={onChangeHandler}
                     placeholder="Select Platform"
-                    name="payment_type"
+                    name="paymentMethod"
                     options={validationService.PaymentOptions}
-                />
-            </WrapperStandardTextField>
-
-            <WrapperStandardTextField
-                lg={12}
-                style={{ paddingRight: '0px', paddingTop: '20px' }}
-            >
-                <PreLabel label={'Content Category'} />
-                <SubHeaderText
-                    customstyle={{ fontWeight: 600 }}
-                    text="Influencer Content Category"
-                    required={true}
-                    color="#282F53"
-                    error={errors['contentCategory']}
-                />
-                <CustomSelect
-                    onChange={onChangeHandler}
-                    placeholder="Select Content Category"
-                    options={validationService.ContentCategoryOptions}
-                    name="contentCategory"
                 />
             </WrapperStandardTextField>
             <WrapperStandardTextField
@@ -97,7 +76,7 @@ const CampaignStep4 = ({
                     customstyle={{ fontWeight: 600 }}
                     text="Description"
                     color="#282F53"
-                    error={errors['campaign_description']}
+                    error={errors['campaignDescription']}
                 />
                 <TextField
                     fullWidth
@@ -108,9 +87,9 @@ const CampaignStep4 = ({
                     }}
                     multiline
                     rows={4} // Set the number of rows based on your design
-                    error={!!errors['campaign_description']}
+                    error={!!errors['campaignDescription']}
                     placeholder="e.g “We want content creators to portray as if they are customers and review the experience in an euthentic way”"
-                    {...register('campaign_description')}
+                    {...register('campaignDescription')}
                 />
             </WrapperStandardTextField>
             <WrapperStandardTextField md={12} lg={12}>

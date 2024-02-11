@@ -208,9 +208,9 @@ const CampaignStep1 = ({
                         justifyContent={'center'}
                         alignItems={'center'}
                         ml="5px"
-                        onClick={() => setPayoutType('In-Store')}
+                        onClick={() => setPayoutType('In-store / Walk-in')}
                     >
-                        {payoutType === 'In-Store' ? (
+                        {payoutType === 'In-store / Walk-in' ? (
                             <CheckCircleOutlineRoundedIcon
                                 fontSize="large"
                                 sx={{ color: '#01AB3B' }}
@@ -235,7 +235,7 @@ const CampaignStep1 = ({
                         ml="40px"
                         onClick={() => setPayoutType('PR Delivery')}
                     >
-                        {payoutType !== 'In-Store' && payoutType ? (
+                        {payoutType !== 'In-store / Walk-in' && payoutType ? (
                             <CheckCircleOutlineRoundedIcon
                                 fontSize="large"
                                 sx={{ color: '#01AB3B' }}

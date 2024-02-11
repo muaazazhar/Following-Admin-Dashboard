@@ -50,7 +50,6 @@ export default function CustomSelect({
                 value={selectedValue} // Use local state for value
                 onChange={(e) => {
                     setSelectedValue(e);
-                    console.log(e);
                     onChange(e, name);
                 }}
                 closeMenuOnSelect={true}

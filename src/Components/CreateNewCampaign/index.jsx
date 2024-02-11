@@ -35,12 +35,14 @@ const CreateNewCampaign = () => {
     const [loading, setLoading] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
     const [errors, setErrors] = useState({});
-    const [index, setIndex] = useState(0);
+    const [index, setIndex] = useState(4);
     const [requiredFields, setRequiredFields] = useState([]);
     const [modal, setModal] = useState({ open: false });
     const [payoutType, setPayoutType] = useState('');
-    const [socialMediaChannels, setSocialMediaChannels] = useState([]);
-    const { updateFormData } = useFormData();
+    const [socialMediaChannelsData, setSocialMediaChannelsData] = useState([]);
+    const [socialMediaChannels, setSocialMediaChannels] = useState();
+
+    const { formData, updateFormData } = useFormData();
 
     const handleClose = () => {
         setModal({ ...modal, open: false });
@@ -101,12 +103,26 @@ const CreateNewCampaign = () => {
             audienceAge: data.audienceAge?.value,
             audienceLanguage: data.audienceLanguage?.value,
             socialMediaChannels,
-            minFollowers: data.minFollowers?.value,
             merchantId: user.user.id,
-            payout: payoutType,
+            walkInOrDelivery: payoutType,
+            inspiration: 'Brand Advertisement',
+            contentRequirement: 'Stories',
+            minFollowers: 10000,
+            engageRate: 50,
+            budgetPerInfluencer: 100,
+            totalBudget: 1000,
+            reachEstimation: 100,
+            totalDealsAvailable: 3,
+            pastCampaigns: 4,
+            rating: 3,
+            availableSpots: 4,
+            logoLink:
+                '/C:/Users/musma/Downloads/WhatsApp Image 2024-01-22 at 19.03.13_f9e1afe7.jpg',
         };
-        console.log(data);
-        updateFormData(data);
+        if (socialMediaChannelsData.length) {
+            data['socialMediaChannels'] = socialMediaChannelsData;
+        }
+        updateFormData({ ...formData, ...data });
 
         let validatedFormData = validateFormData(data, requiredFields);
         setErrors(validatedFormData);
@@ -125,13 +141,34 @@ const CreateNewCampaign = () => {
                     ...data,
                     locations: `${data.city}, ${data.state}, ${data.country}`,
                 };
+                updateFormData({ ...formData, ...data });
                 setErrors(validatedFormData);
                 delete data.payout;
                 if (Object.entries(validatedFormData).length < 1) {
                     setIndex((prev) => prev + 1);
-                    if (index === 2) {
+                    if (index === 3) {
                         try {
-                            const response = await dev.post('/campaign', data, {
+                            const body = new FormData();
+                            Object.entries(formData).forEach(([key, value]) => {
+                                if (key === 'socialMediaChannels') {
+                                    // For socialMediaChannels, iterate over each channel and format accordingly
+                                    value.forEach((channel, index) => {
+                                        Object.entries(channel).forEach(
+                                            ([subKey, subValue]) => {
+                                                body.append(
+                                                    `socialMediaChannels[${index}][${subKey}]`,
+                                                    subValue,
+                                                );
+                                            },
+                                        );
+                                    });
+                                } else {
+                                    // For other fields, directly add them to formData
+                                    body.append(key, value);
+                                }
+                            });
+
+                            const response = await dev.post('/campaign', body, {
                                 headers: {
                                     token: user.token,
                                 },
@@ -261,6 +298,12 @@ const CreateNewCampaign = () => {
                                         setRequiredFields={setRequiredFields}
                                         socialMediaChannels={
                                             socialMediaChannels
+                                        }
+                                        socialMediaChannelsData={
+                                            socialMediaChannelsData
+                                        }
+                                        setSocialMediaChannelsData={
+                                            setSocialMediaChannelsData
                                         }
                                     />
                                 )}
