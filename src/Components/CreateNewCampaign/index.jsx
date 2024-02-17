@@ -41,7 +41,6 @@ const CreateNewCampaign = () => {
     } = useForm();
 
     const onChangeHandler = (e, name) => {
-        console.log(name);
         const { [name]: tmp, ...rest } = errors;
         setErrors(rest);
         setValue(name, e);
@@ -101,6 +100,7 @@ const CreateNewCampaign = () => {
             pastCampaigns: 4,
             rating: 3,
             availableSpots: 4,
+            campaignType: 'string',
             logoLink:
                 '/C:/Users/musma/Downloads/WhatsApp Image 2024-01-22 at 19.03.13_f9e1afe7.jpg',
         };
@@ -114,7 +114,6 @@ const CreateNewCampaign = () => {
         if (Object.entries(validatedFormData).length < 1) {
             if (index < 1) {
                 setIndex(1);
-                // return;
             } else {
                 data = {
                     ...data,
@@ -133,22 +132,44 @@ const CreateNewCampaign = () => {
                 if (Object.entries(validatedFormData).length < 1) {
                     if (index === 3) {
                         try {
+                            const tempData = { ...formData, ...data };
                             const body = new FormData();
-                            Object.entries(formData).forEach(([key, value]) => {
+                            Object.entries(tempData).forEach(([key, value]) => {
                                 if (key === 'socialMediaChannels') {
                                     // For socialMediaChannels, iterate over each channel and format accordingly
                                     value.forEach((channel, index) => {
                                         Object.entries(channel).forEach(
                                             ([subKey, subValue]) => {
-                                                body.append(
-                                                    `socialMediaChannels[${index}][${subKey}]`,
-                                                    subValue,
-                                                );
+                                                if (Array.isArray(subValue)) {
+                                                    const temp = [];
+                                                    subValue.forEach((elem) => {
+                                                        temp.push(elem.value);
+                                                    });
+                                                    body.append(
+                                                        `socialMediaChannels[${index}][${subKey}]`,
+                                                        temp.join(', '),
+                                                    );
+                                                } else if (
+                                                    typeof subValue === 'object'
+                                                ) {
+                                                    // For other fields with object values, directly add the value to the body
+                                                    body.append(
+                                                        `socialMediaChannels[${index}][${subKey}]`,
+                                                        subValue.value,
+                                                    );
+                                                } else {
+                                                    body.append(
+                                                        `socialMediaChannels[${index}][${subKey}]`,
+                                                        subValue,
+                                                    );
+                                                }
                                             },
                                         );
                                     });
+                                } else if (typeof value === 'object') {
+                                    body.append(key, value.value);
                                 } else {
-                                    // For other fields, directly add them to formData
+                                    // For other fields, directly add them to body
                                     body.append(key, value);
                                 }
                             });
